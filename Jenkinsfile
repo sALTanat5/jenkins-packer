@@ -16,21 +16,27 @@ spec:
 
 def buildNumber = env.BUILD_NUMBER
 
-properties([
-    parameters([
-        choice(choices: ['us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'], name: 'region')
-        ])
-        ])
 
+ if ( env.BRANCH_NAME == "main" ) {
+    region = "us-east-1"
+ }      
+
+ else if ( env.BRANCH_NAME == "qa"){
+    region = "us-east-2"
+ }
+
+ else if ( env.BRANCH_NAME == "dev"){
+    region = "us-west-1"
+ }
 podTemplate(cloud: 'kubernetes', label: 'packer', showRawYaml: false, yaml: template) {
     node("packer"){
         container("packer"){
 
         withCredentials([usernamePassword(credentialsId: 'aws-creds', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-            withEnv(["AWS_REGION=${params.region}"]) {
+            withEnv(["AWS_REGION=${region}"]) {
             
             stage("Git Clone"){
-                git branch: 'main', url: 'https://github.com/kaizenacademy/jenkins-packer.git'
+                git branch: 'main', url: 'https://github.com/sALTanat5/jenkins-packer.git'
             }
             
             stage("Packer"){
