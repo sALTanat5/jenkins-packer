@@ -30,7 +30,7 @@ podTemplate(cloud: 'kubernetes', label: 'packer', showRawYaml: false, yaml: temp
             withEnv(["AWS_REGION=${params.region}"]) {
             
             stage("Git Clone"){
-                git branch: 'main', url: 'https://github.com/kaizenacademy/jenkins-packer.git'
+                git branch: 'main', url: 'https://github.com/sALTanat5/jenkins-packer.git'
             }
             
             stage("Packer"){
